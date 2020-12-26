@@ -23,7 +23,7 @@ $(YARN_LOCK_MANIFEST): package.json yarn.lock
 node: $(YARN_LOCK_MANIFEST)
 
 $(PODFILE_LOCK_MANIFEST): $(YARN_LOCK_MANIFEST) $(GEMS_MANIFEST) ios/Podfile ios/Podfile.lock
-	cd ios && pod install && touch $(PODFILE_LOCK_MANIFEST)
+	cd ios && pod install --repo-update && touch $(PODFILE_LOCK_MANIFEST)
 
 .PHONY: pods
 pods: $(PODFILE_LOCK_MANIFEST)
