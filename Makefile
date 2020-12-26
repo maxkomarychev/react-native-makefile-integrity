@@ -31,7 +31,7 @@ clean/node:
 	rm -rf node_modules
 
 $(PODFILE_LOCK_MANIFEST): $(YARN_LOCK_MANIFEST) $(GEMS_MANIFEST) ios/Podfile ios/Podfile.lock
-	cd ios && pod install --repo-update && touch $(PODFILE_LOCK_MANIFEST)
+	cd ios && bundle exec pod install --repo-update && touch $(PODFILE_LOCK_MANIFEST)
 
 .PHONY: pods
 pods: $(PODFILE_LOCK_MANIFEST)
