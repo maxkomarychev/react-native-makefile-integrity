@@ -16,11 +16,19 @@ $(GEMS_MANIFEST): Gemfile Gemfile.lock | bundle-config
 .PHONY: gems
 gems: $(GEMS_MANIFEST)
 
+.PHONY: clean/gems
+clean/gems:
+	rm -rf .bundle vendor
+
 $(YARN_LOCK_MANIFEST): package.json yarn.lock
 	yarn install && cp yarn.lock $(YARN_LOCK_MANIFEST)
 
 .PHONY: node
 node: $(YARN_LOCK_MANIFEST)
+
+.PHONY: clean/node
+clean/node:
+	rm -rf node_modules
 
 $(PODFILE_LOCK_MANIFEST): $(YARN_LOCK_MANIFEST) $(GEMS_MANIFEST) ios/Podfile ios/Podfile.lock
 	cd ios && pod install --repo-update && touch $(PODFILE_LOCK_MANIFEST)
@@ -28,5 +36,12 @@ $(PODFILE_LOCK_MANIFEST): $(YARN_LOCK_MANIFEST) $(GEMS_MANIFEST) ios/Podfile ios
 .PHONY: pods
 pods: $(PODFILE_LOCK_MANIFEST)
 
+.PHONY: clean/pods
+clean/pods:
+	rm -rf ios/Pods
+
 .PHONY: deps
 deps: node pods gems
+
+.PHONY: clean
+clean: clean/gems clean/node clean/pods
